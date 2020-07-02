@@ -1,10 +1,22 @@
-# Stripe SDK [![GoDoc](https://godoc.org/github.com/hatchify/stripe-sdk?status.svg)](https://godoc.org/github.com/hatchify/stripe-sdk) ![Status](https://img.shields.io/badge/status-beta-yellow.svg)
+package stripe
 
-Stripe SDK is an SDK wrapper for the Stripe API
+import (
+	"fmt"
+	"log"
+	"os"
+	"testing"
+)
 
-## Usage 
-### New
-```go
+func TestNew(t *testing.T) {
+	var err error
+	// Get api key from OS environment
+	apiKey := os.Getenv("STRIPE_API_KEY")
+	// Initialize new instance of the Stripe SDK
+	if _, err = New(apiKey); err != nil {
+		t.Fatal(err)
+	}
+}
+
 func ExampleNew() {
 	var (
 		u   *Stripe
@@ -20,4 +32,3 @@ func ExampleNew() {
 	// Stripe SDK is now ready to use!
 	fmt.Println("Stripe SDK is now ready to use!", u)
 }
-```
