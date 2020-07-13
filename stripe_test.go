@@ -32,3 +32,23 @@ func ExampleNew() {
 	// Stripe SDK is now ready to use!
 	fmt.Println("Stripe SDK is now ready to use!", u)
 }
+
+func TestStripe_GetCharges(t *testing.T) {
+	var err error
+	var s *Stripe
+	// Get api key from OS environment
+	apiKey := os.Getenv("STRIPE_API_KEY")
+	// Initialize new instance of the Stripe SDK
+	if s, err = New(apiKey); err != nil {
+		t.Fatal(err)
+	}
+
+	var out *interface{}
+	if out, err = s.GetCharges(); err != nil {
+		t.Fatal(err)
+	}
+
+	//debug
+	fmt.Printf("%+v\n", *out)
+
+}
