@@ -5,6 +5,9 @@ import (
 	"log"
 	"os"
 	"testing"
+
+	"github.com/hatchify/requester"
+	"github.com/hatchify/requester/mock"
 )
 
 func TestNew(t *testing.T) {
@@ -33,15 +36,35 @@ func ExampleNew() {
 	fmt.Println("Stripe SDK is now ready to use!", u)
 }
 
-func TestStripe_GetCharges(t *testing.T) {
+func setup(t *testing.T) (s *Stripe) {
+
 	var err error
-	var s *Stripe
+
 	// Get api key from OS environment
 	apiKey := os.Getenv("STRIPE_API_KEY")
 	// Initialize new instance of the Stripe SDK
 	if s, err = New(apiKey); err != nil {
 		t.Fatal(err)
 	}
+
+	//Define what will be the backend for our mocks
+	var backend = mock.NewFileBackend("testdata/stripe.json")
+
+	//Setup Mock Requester
+	var r requester.Interface
+	if r, err = mock.NewSpyRequester(Hostname, backend); err != nil {
+		t.Fatal(err)
+	}
+
+	s.SetRequester(r)
+
+	return
+}
+
+func TestStripe_GetCharges(t *testing.T) {
+
+	var err error
+	s := setup(t)
 
 	var out *interface{}
 	if out, err = s.GetCharges(); err != nil {
@@ -50,5 +73,32 @@ func TestStripe_GetCharges(t *testing.T) {
 
 	//debug
 	fmt.Printf("%+v\n", *out)
+}
 
+func TestStripe_GetCustomers(t *testing.T) {
+
+	var err error
+	s := setup(t)
+
+	var out *Customer
+	if out, err = s.GetCustomers(); err != nil {
+		t.Fatal(err)
+	}
+
+	//debug
+	fmt.Printf("%+v\n", *out)
+}
+
+func TestStripe_CreateCustomer(t *testing.T) {
+
+	var err error
+	s := setup(t)
+
+	var out *Customer
+	if out, err = s.CreateCustomer(); err != nil {
+		t.Fatal(err)
+	}
+
+	//debug
+	fmt.Printf("%+v\n", *out)
 }

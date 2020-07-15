@@ -19,6 +19,8 @@ const (
 const (
 	// RouteGetCharges is the route for getting all the charges
 	RouteGetCharges = "charges"
+	// RouteCustomers is the route for getting all customers
+	RouteCustomers = "customers"
 )
 
 // New will return a new instance of the Stripe API SDK
@@ -109,8 +111,37 @@ func (s *Stripe) processError(body io.Reader) (err error) {
 // GetAccount will get the account of the currently logged in user
 func (s *Stripe) GetCharges() (a *interface{}, err error) {
 	var resp interface{}
+
 	// Make request to "Get Account" route
 	if err = s.request("GET", RouteGetCharges, nil, nil, &resp); err != nil {
+		return
+	}
+
+	// Set return value from response
+	a = &resp
+	return
+}
+
+func (s *Stripe) GetCustomers() (a *Customer, err error) {
+
+	var resp Customer
+
+	// Make request to "Customers" route
+	if err = s.request("GET", RouteCustomers, nil, nil, &resp); err != nil {
+		return
+	}
+
+	// Set return value from response
+	a = &resp
+	return
+}
+
+func (s *Stripe) CreateCustomer() (a *Customer, err error) {
+
+	var resp Customer
+
+	// Make request to "Customers" route
+	if err = s.request("POST", RouteCustomers, nil, nil, &resp); err != nil {
 		return
 	}
 
