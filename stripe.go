@@ -21,6 +21,8 @@ const (
 	RouteGetCharges = "charges"
 	// RouteCustomers is the route for getting all customers
 	RouteCustomers = "customers"
+	// RouteSubscriptions is the route for getting all the subscriptions
+	RouteSubscriptions = "subscriptions"
 )
 
 // New will return a new instance of the Stripe API SDK
@@ -148,4 +150,22 @@ func (s *Stripe) CreateCustomer() (a *Customer, err error) {
 	// Set return value from response
 	a = &resp
 	return
+}
+
+func (s *Stripe) GetSubscriptionList() (a *SubscriptionsList, err error) {
+
+	var resp SubscriptionsList
+
+	// Make request to "Customers" route
+	if err = s.request("GET", RouteSubscriptions, nil, nil, &resp); err != nil {
+		return
+	}
+
+	// Set return value from response
+	a = &resp
+	return
+}
+
+func (s *Stripe) CreateSubscription() {
+
 }

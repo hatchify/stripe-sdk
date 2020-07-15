@@ -102,3 +102,17 @@ func TestStripe_CreateCustomer(t *testing.T) {
 	//debug
 	fmt.Printf("%+v\n", *out)
 }
+
+func TestStripe_GetSubscriptionList(t *testing.T) {
+
+	var err error
+	s := setup(t)
+
+	var out *SubscriptionsList
+	if out, err = s.GetSubscriptionList(); err != nil {
+		t.Fatal(err)
+	}
+
+	//debug
+	fmt.Printf("%+v\n", *out)
+}
