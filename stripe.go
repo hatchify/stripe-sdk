@@ -156,7 +156,7 @@ func (s *Stripe) GetSubscriptionList() (a *SubscriptionsList, err error) {
 
 	var resp SubscriptionsList
 
-	// Make request to "Customers" route
+	// Make request to "Subscriptions" route
 	if err = s.request("GET", RouteSubscriptions, nil, nil, &resp); err != nil {
 		return
 	}
@@ -166,6 +166,16 @@ func (s *Stripe) GetSubscriptionList() (a *SubscriptionsList, err error) {
 	return
 }
 
-func (s *Stripe) CreateSubscription() {
+func (s *Stripe) CreateSubscription() (a *Subscription, err error) {
 
+	var resp Subscription
+
+	// Make request to "Subscriptions" route
+	if err = s.request("POST", RouteSubscriptions, nil, nil, &resp); err != nil {
+		return
+	}
+
+	// Set return value from response
+	a = &resp
+	return
 }
