@@ -7,6 +7,47 @@ import (
 	sgo "github.com/stripe/stripe-go/v71"
 )
 
+func TestStripe_CustomerFlowNewGetUpdateDelete(t *testing.T) {
+	var err error
+	s := setup(t)
+
+	var name = "TestingFromGo"
+	var params = &sgo.CustomerParams{Name: &name}
+
+	var cust *sgo.Customer
+
+	if cust, err = s.CustomerNew(params); err != nil {
+		t.Fatal(err)
+	}
+
+	fmt.Printf("val: %+v\n", cust.ID)
+
+	//Let's get our creation
+	var custGot *sgo.Customer
+	if custGot, err = s.CustomerGet(cust.ID, params); err != nil {
+		t.Fatal(err)
+	}
+
+	if cust.ID != custGot.ID {
+		t.Fatal("mismatched ids")
+	}
+
+	//Let's update our monstrosity
+	var custUpdated *sgo.Customer
+	var updatedName = "TestingFromGo2"
+	var updatedParams = &sgo.CustomerParams{Name: &updatedName}
+	if custUpdated, err = s.CustomerUpdate(cust.ID, updatedParams); err != nil {
+		t.Fatal(err)
+	}
+
+	if cust.Name == custUpdated.Name {
+		fmt.Printf("'%+v' -> '%+v'", cust.Name, custUpdated.Name)
+		t.Fatal("name didn't update2")
+	}
+
+	fmt.Printf("val: %+v\n", cust.Name)
+}
+
 func TestStripe_CustomerNew(t *testing.T) {
 
 	var err error
@@ -18,7 +59,6 @@ func TestStripe_CustomerNew(t *testing.T) {
 	if _, err = s.CustomerNew(params); err != nil {
 		t.Fatal(err)
 	}
-
 }
 
 func TestStripe_CustomerGet(t *testing.T) {

@@ -10,27 +10,50 @@ import (
 	"github.com/stripe/stripe-go/v71/form"
 )
 
-func (s *Stripe) paramsToOpts(params *sgo.CustomerParams) requester.Opts {
-	for k, v := range params.Headers {
-		for _, line := range v {
-			// Use Set to override the default value possibly set before
-			//req.Header.Set(k, line)
-			fmt.Println(k, line)
-		}
-	}
+func (s *Stripe) paramsToOpts(params sgo.ParamsContainer) (out requester.Opts) {
 
-	return requester.Opts{}
+	h := requester.NewHeaders()
+
+	//for k, v := range params.Headers {
+	//	for _, line := range v {
+	//		fmt.Println(k, line)
+	//
+	//		h.Add(requester.Header{
+	//			Key: k,
+	//			Val: line,
+	//		})
+	//	}
+	//}
+
+	return requester.Opts{h}
 }
 
 func (s *Stripe) listParamsToOpts(params *sgo.CustomerListParams) requester.Opts {
 	return requester.Opts{}
 }
 
+func (s *Stripe) paramsToBody(params *sgo.CustomerParams) (out []byte) {
+	body := &form.Values{}
+	form.AppendTo(body, params)
+
+	var bodyString string
+
+	if !body.Empty() {
+		bodyString = body.Encode()
+	}
+
+	return []byte(bodyString)
+}
+
 // New creates a new customer.
 func (s *Stripe) CustomerNew(params *sgo.CustomerParams) (cust *sgo.Customer, err error) {
-	opts := s.paramsToOpts(params)
 
-	err = s.request("POST", "customers", opts, nil, cust)
+	cust = &sgo.Customer{}
+
+	opts := s.paramsToOpts(params)
+	body := s.paramsToBody(params)
+
+	err = s.request("POST", "customers", opts, body, cust)
 
 	return
 }
@@ -55,8 +78,9 @@ func (s *Stripe) CustomerUpdate(id string, params *sgo.CustomerParams) (cust *sg
 	cust = &sgo.Customer{}
 
 	opts := s.paramsToOpts(params)
+	body := s.paramsToBody(params)
 
-	err = s.request("POST", path, opts, nil, cust)
+	err = s.request("POST", path, opts, body, cust)
 
 	return
 }

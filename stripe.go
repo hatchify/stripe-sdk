@@ -64,7 +64,7 @@ func (s *Stripe) request(method, endpoint string, opts requester.Opts, body []by
 	// These content-type headers are needed for when we post things
 	var setHeaders requester.Headers = requester.NewHeaders(requester.Header{
 		Key: "Content-Type",
-		Val: "application/json",
+		Val: "application/x-www-form-urlencoded",
 	})
 
 	opts = append(opts, setBasicAuth, setHeaders)
