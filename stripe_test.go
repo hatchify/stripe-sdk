@@ -5,9 +5,6 @@ import (
 	"log"
 	"os"
 	"testing"
-
-	"github.com/hatchify/requester"
-	"github.com/hatchify/requester/mock"
 )
 
 func TestNew(t *testing.T) {
@@ -47,72 +44,16 @@ func setup(t *testing.T) (s *Stripe) {
 		t.Fatal(err)
 	}
 
-	//Define what will be the backend for our mocks
-	var backend = mock.NewFileBackend("testdata/stripe.json")
-
-	//Setup Mock Requester
-	var r requester.Interface
-	if r, err = mock.NewSpyRequester(Hostname, backend); err != nil {
-		t.Fatal(err)
-	}
-
-	s.SetRequester(r)
+	////Define what will be the backend for our mocks
+	//var backend = mock.NewFileBackend("testdata/stripe.json")
+	//
+	////Setup Mock Requester
+	//var r requester.Interface
+	//if r, err = mock.NewSpyRequester(Hostname, backend); err != nil {
+	//	t.Fatal(err)
+	//}
+	//
+	//s.SetRequester(r)
 
 	return
-}
-
-func TestStripe_GetCharges(t *testing.T) {
-
-	var err error
-	s := setup(t)
-
-	var out *interface{}
-	if out, err = s.GetCharges(); err != nil {
-		t.Fatal(err)
-	}
-
-	//debug
-	fmt.Printf("%+v\n", *out)
-}
-
-func TestStripe_GetCustomers(t *testing.T) {
-
-	var err error
-	s := setup(t)
-
-	var out *Customer
-	if out, err = s.GetCustomers(); err != nil {
-		t.Fatal(err)
-	}
-
-	//debug
-	fmt.Printf("%+v\n", *out)
-}
-
-func TestStripe_CreateCustomer(t *testing.T) {
-
-	var err error
-	s := setup(t)
-
-	var out *Customer
-	if out, err = s.CreateCustomer(); err != nil {
-		t.Fatal(err)
-	}
-
-	//debug
-	fmt.Printf("%+v\n", *out)
-}
-
-func TestStripe_GetSubscriptionList(t *testing.T) {
-
-	var err error
-	s := setup(t)
-
-	var out *SubscriptionsList
-	if out, err = s.GetSubscriptionList(); err != nil {
-		t.Fatal(err)
-	}
-
-	//debug
-	fmt.Printf("%+v\n", *out)
 }

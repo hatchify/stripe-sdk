@@ -7,6 +7,7 @@ import (
 	"path"
 
 	"github.com/hatchify/requester"
+	stripe "github.com/stripe/stripe-go/v71"
 )
 
 const (
@@ -29,7 +30,7 @@ const (
 func New(apiKey string) (s *Stripe, err error) {
 	var u Stripe
 
-	u.req = requester.New(&http.Client{}, Hostname)
+	u.req = requester.New(&http.Client{}, stripe.APIURL)
 
 	// Set API key
 	u.apiKey = apiKey
@@ -108,64 +109,4 @@ func (s *Stripe) processError(body io.Reader) (err error) {
 	// Set returning error as the error response's Error value
 	err = errResp.Error
 	return
-}
-
-// GetAccount will get the account of the currently logged in user
-func (s *Stripe) GetCharges() (a *interface{}, err error) {
-	var resp interface{}
-
-	// Make request to "Get Account" route
-	if err = s.request("GET", RouteGetCharges, nil, nil, &resp); err != nil {
-		return
-	}
-
-	// Set return value from response
-	a = &resp
-	return
-}
-
-func (s *Stripe) GetCustomers() (a *Customer, err error) {
-
-	var resp Customer
-
-	// Make request to "Customers" route
-	if err = s.request("GET", RouteCustomers, nil, nil, &resp); err != nil {
-		return
-	}
-
-	// Set return value from response
-	a = &resp
-	return
-}
-
-func (s *Stripe) CreateCustomer() (a *Customer, err error) {
-
-	var resp Customer
-
-	// Make request to "Customers" route
-	if err = s.request("POST", RouteCustomers, nil, nil, &resp); err != nil {
-		return
-	}
-
-	// Set return value from response
-	a = &resp
-	return
-}
-
-func (s *Stripe) GetSubscriptionList() (a *SubscriptionsList, err error) {
-
-	var resp SubscriptionsList
-
-	// Make request to "Customers" route
-	if err = s.request("GET", RouteSubscriptions, nil, nil, &resp); err != nil {
-		return
-	}
-
-	// Set return value from response
-	a = &resp
-	return
-}
-
-func (s *Stripe) CreateSubscription() {
-
 }

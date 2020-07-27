@@ -2,8 +2,9 @@ module github.com/hatchify/stripe-sdk
 
 go 1.14
 
-// Replace Local Deps
-
-replace github.com/hatchify/requester => /home/sergey/go/src/github.com/hatchify/requester
-
-require github.com/hatchify/requester v0.0.0-00010101000000-000000000000
+require (
+	github.com/hatchify/requester v0.1.3
+	github.com/stretchr/testify v1.5.1
+	github.com/stripe/stripe-go v70.15.0+incompatible
+	github.com/stripe/stripe-go/v71 v71.35.0
+)
