@@ -5,9 +5,6 @@ import (
 	"log"
 	"os"
 	"testing"
-
-	"github.com/hatchify/requester"
-	"github.com/hatchify/requester/mock"
 )
 
 func TestNew(t *testing.T) {
@@ -47,16 +44,16 @@ func setup(t *testing.T) (s *Stripe) {
 		t.Fatal(err)
 	}
 
-	//Define what will be the backend for our mocks
-	var backend = mock.NewFileBackend("testdata/stripe.json")
-
-	//Setup Mock Requester
-	var r requester.Interface
-	if r, err = mock.NewSpyRequester(Hostname, backend); err != nil {
-		t.Fatal(err)
-	}
-
-	s.SetRequester(r)
+	////Define what will be the backend for our mocks
+	//var backend = mock.NewFileBackend("testdata/stripe.json")
+	//
+	////Setup Mock Requester
+	//var r requester.Interface
+	//if r, err = mock.NewSpyRequester(Hostname, backend); err != nil {
+	//	t.Fatal(err)
+	//}
+	//
+	//s.SetRequester(r)
 
 	return
 }

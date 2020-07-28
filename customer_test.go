@@ -41,11 +41,14 @@ func TestStripe_CustomerFlowNewGetUpdateDelete(t *testing.T) {
 	}
 
 	if cust.Name == custUpdated.Name {
-		fmt.Printf("'%+v' -> '%+v'", cust.Name, custUpdated.Name)
+		//fmt.Printf("'%+v' -> '%+v'", cust.Name, custUpdated.Name)
 		t.Fatal("name didn't update2")
 	}
 
-	fmt.Printf("val: %+v\n", cust.Name)
+	if _, err = s.CustomerDel(cust.ID, params); err != nil {
+		t.Fatal("didn't delete")
+	}
+
 }
 
 func TestStripe_CustomerNew(t *testing.T) {
@@ -68,11 +71,12 @@ func TestStripe_CustomerGet(t *testing.T) {
 
 	var params = &sgo.CustomerParams{}
 
-	if _, err = s.CustomerGet("cus_HiykXILsFQrdhe", params); err != nil {
+	if _, err = s.CustomerGet("cus_HiykXILsFQrdhe111", params); err == nil {
 		t.Fatal(err)
 	}
 }
 
+//Testing for failure case
 func TestStripe_CustomerUpdate(t *testing.T) {
 
 	var err error
@@ -80,11 +84,12 @@ func TestStripe_CustomerUpdate(t *testing.T) {
 
 	var params = &sgo.CustomerParams{}
 
-	if _, err = s.CustomerUpdate("cus_HiykXILsFQrdhe", params); err != nil {
+	if _, err = s.CustomerUpdate("cus_HiykXILsFQrdhe", params); err == nil {
 		t.Fatal(err)
 	}
 }
 
+//Testing for failure case
 func TestStripe_CustomerDel(t *testing.T) {
 
 	var err error
@@ -92,7 +97,7 @@ func TestStripe_CustomerDel(t *testing.T) {
 
 	var params = &sgo.CustomerParams{}
 
-	if _, err = s.CustomerDel("cus_HiykXILsFQrdhe", params); err != nil {
+	if _, err = s.CustomerDel("cus_HiykXILsFQrdhe", params); err == nil {
 		t.Fatal(err)
 	}
 }
